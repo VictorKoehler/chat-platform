@@ -8,6 +8,7 @@ const inherits = require('util').inherits;
 const lcd = require('./helpers/lcd');
 const Table = require('cli-table');
 const request = require('request').defaults({ encoding: null });
+const bodyParser = require('body-parser');
 
 const identity = function(obj) { return obj; };
 const green = clc.greenBright;
@@ -628,6 +629,7 @@ const ChatExpress = function(options) {
         // eslint-disable-next-line no-console
         console.log(green(host + callback) + (description != null ? grey(' - ') + white(description) : ''));
         // attach to Express instance
+        RED.httpNode.use(bodyParser.json());
         const escaped = String(`^${callback}$`).replace(RegExp('/', 'g'), '\\/');
         RED.httpNode.use(new RegExp(escaped), middleware.bind(chatServer));
         return null;
